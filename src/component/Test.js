@@ -3,62 +3,62 @@ import {useParams,useNavigate,Link} from "react-router-dom"
 import axios from 'axios';
 import { computeHeadingLevel } from '@testing-library/react';
 import Finish from './Finish';
-
+let num=0;
 function Test() {
     const navigate=useNavigate();
-     const {id}=useParams();
+     const {id,id1}=useParams();
     //  console.log("exam",id);
     const[test,settest]=useState([])
-    const [question, setQuestion] = useState("");
+    const [question, setQuestion] = useState([]);
     const[count,setCount]=useState(0)
     const[count2,setCount2]=useState(0)
     const[optbutton,setoptbutton]=useState("")
     const[option,setoption]=useState("")
     let temo=[]
+   
     // const[question,setquestion]=useState([])
-    // const[examId,setExamId]=useState(JSON.parse(localStorage.getItem("Exam_id")))
 
 
     useEffect(() => {
         axios.get("https://dip-kaluse.github.io/examport/portal.json")
         .then(res=>{
-            console.log(res.data)
+            // console.log(res.data)
             const result=res.data.tests.filter((obj,index)=>obj._id==id)
             settest(result[0]);
       
             const ind = result[0].questions.filter((obj, index) => {
-                if (obj._id === id)  {
+                if (obj._id === id1 )  {
                   setCount(index);
                   return index;
                 }
               });
+    
         })
         .catch(err=>{
             console.log("error");
         })
+
         }, [])
 
-        useEffect(()=>{
-
-            // localStorage.setItem(test.questions[count]._id,JSON.stringify(temo.sort()))
-
-        },[count2])
+      
 
         useEffect(()=>{
+            // console.log(num++);
+               (test.questions!=null && test.questions.length>0&&  navigate(`/Test/${test._id}/${test.questions[count]._id} `))
+
+        },[count,count2])
+
+        useEffect(()=>{
+            // console.log(num++);
             if(question != "" && count<test.questions.length)
             {     
-            //   setque(data.questions)/
-            //   setquestion(data.questions[count].questionText)
               setoption(test.questions[count].options)
             }
-            // console.log("opt",question!="" && test.questions[0].options[0]);
+            
         },[count])
 
-
-
-
         useEffect(() => {
- 
+            // console.log(num++);
             if(test != "" && test .questions[count].type==="Multiple-Response")
             {
                 setoptbutton("checkbox" )
@@ -81,7 +81,9 @@ function Test() {
 
         const handleNextQuestion = () => {
             setCount((prev) => prev + 1);
-          };
+            // setCount2((prev)=>prev+1)
+     
+        };
 
           const handlePreviosQuestion = () => {
             setCount((prev) => prev - 1);
@@ -92,9 +94,10 @@ function Test() {
           };
 
           const saveradioval=(e)=>{
-                // console.log(count);
-            localStorage.setItem(test.questions[count]._id,JSON.stringify(e.target.value))
-            
+                setCount2((prev)=>prev+1);
+
+                localStorage.setItem(test.questions[count]._id,JSON.stringify(e.target.value))
+
         }
  
         const savecheckboxval=(e)=>{
@@ -104,9 +107,6 @@ function Test() {
                 let temp=[];
                 temp.push(Number(e.target.value))
                 temo=[...temo,...temp]    
-                    // console.log(temo);
-                // temo=temp    
-                // console.log(temo);
             }
             else
             {
@@ -116,7 +116,6 @@ function Test() {
                 temo.includes(Number(e.target.value))
                 &&(temp2= temo.filter((obj)=>obj !== Number(e.target.value)))
                 temo=temp2;
-                console.log(temo);
             }   
             setCount2((prev)=>prev+1);
 
@@ -127,7 +126,6 @@ function Test() {
             const checkoption=(index)=>
             {
                 const checks=JSON.parse(localStorage.getItem(test.questions[count]._id))
-                console.log((checks));
                 if(checks!=null  && optbutton=="checkbox" && checks.includes(index) )
                 {  
                         return true;
@@ -136,15 +134,15 @@ function Test() {
                 {
                     // console.log("asdf");
                     return true
-                }
-                
-
+                }                
             }
             
     const finish=()=>{
-      
+        // localStorage.setItem("test",JSON.stringify(1))        
+
     }
 
+    // console.log(test.length!=0 && test.question.length);
 
 return (
     <div>
@@ -191,13 +189,14 @@ return (
                     <button className="btn btn-success" style={myfun} disabled={count==0} onClick={()=>{ handlePreviosQuestion()}}>Previous</button>
                     </Link>   
 
-
-                    <Link to={test.length!=0 && (`/Test/${test._id}/${test.questions[count]._id}`)}>    
+                        
+                    <Link to={test.length!=0 && (`/Test/${test._id}/${test.questions[count]._id} `)}> 
+                   
                     <button className="btn btn-success" disabled={test.length!=0 && count>test.questions.length-2} onClick={()=>{ handleNextQuestion()}}>Next</button>
                     </Link>   
 
                     <Link to={test.length!=0 && (`/Finish/${test._id}`)}>    
-                    <button className="pull-right btn btn-danger" disabled={test.length!=0 && count<test.questions.length-1} onClick={finish()} >Finish</button>
+                    <button className="pull-right btn btn-danger" disabled={test.length!=0 && count<test.questions.length-1} onClick={()=>finish()} >Finish</button>
                     </Link>   
 
                         {/* <a href="finish.html" className="pull-right btn btn-danger">Finish</a> */}

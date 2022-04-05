@@ -19,9 +19,9 @@ function Finish() {
       
             result[0].questions.map((obj,index)=>{ 
                 const checks=JSON.parse(localStorage.getItem(obj._id))
-                console.log("ty",typeof checks);
-                console.log("cor",typeof  String(obj.correctOptionIndex));
-       String(checks)==String(obj.correctOptionIndex) && count2++; 
+                // console.log("ty",typeof checks);
+                // console.log("cor",typeof  String(obj.correctOptionIndex));
+                String(checks)==String(obj.correctOptionIndex) && count2++; 
                 setCount(count2)
             })
             // setCount(count2)
@@ -29,20 +29,26 @@ function Finish() {
         .catch(err=>{
             console.log("error");
         })
+    
+        return () => {
+            navigate("/");
+          };
         }, [])
-
-
 
 
     const clear=()=>
     {
-        localStorage.clear();
+            data.questions.map((obj,index)=>{
+            localStorage.removeItem(obj._id);
+            localStorage.removeItem("test")   
+            })
+
     }
 
 
 
 // console.log(data.length===0 && data );
-console.log(count);
+// console.log(count);
   return (
     <div>
 
@@ -56,8 +62,8 @@ console.log(count);
                     <div className="panel-body">
                         <center>
                             <h2 className="">Total no of Questions: {data!="" && data.questions.length} </h2>
-                            <h3 className="text-success">Correct Answers: {count} </h3>
-                            <h3 className="text-danger">wrong Answers {data!="" && data.questions.length-count}:</h3>
+                            <h3 className="text-success">Correct Answers:- {count} </h3>
+                            <h3 className="text-danger">wrong Answers:- {data!="" && data.questions.length-count}</h3>
                       
                             <button className="btn btn-warning" onClick={()=>{clear();navigate("/")}}> Home</button>                      
                             {/* <h3 className="text-success">Correct Answers: {right}

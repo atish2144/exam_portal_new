@@ -22,25 +22,8 @@ function Homepage() {
     }, [])
 
 
-    // console.log(test);  
-
-    // const myfunction=(index)=>{
-    //     // console.log("d",test)
-        
-    //     for (let i = 0; i < test.length; i++) {
-    //         if (index == i) 
-    //         {
-    //            let temp = test[i];
-    //            console.log(temp) 
-               
-    //           localStorage.setItem("test", JSON.stringify(temp));
-    //         }
-    //       }  
-    //   }
-
     return (
     <div>
-
      <div className="container">
         <div className="row">
             <h1>My Interview Portal</h1>
