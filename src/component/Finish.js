@@ -32,6 +32,8 @@ function Finish() {
     
         return () => {
             navigate("/");
+            localStorage.clear();                
+        
           };
         }, [])
 
